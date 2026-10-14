@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1769d2">
+<title>REDAS বাজার — অনলাইন শপিং</title>
+<style>
+:root{--blue:#1769d2;--yellow:#ffd814;--ink:#172337;--muted:#657386;--bg:#f1f3f6;--white:#fff;--green:#16834a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{background:var(--blue);color:#fff;padding:12px 4%;display:flex;gap:18px;align-items:center;position:sticky;top:0;z-index:10;box-shadow:0 2px 8px #0002}
+.logo{font-weight:900;font-size:25px;letter-spacing:.3px;white-space:nowrap;line-height:1}
+.logo small{display:block;font-size:11px;font-weight:400;margin-top:5px;color:#e8f1ff}
+.search{display:flex;flex:1;max-width:760px;background:#fff;border-radius:4px;overflow:hidden}
+.search input{border:0;outline:0;padding:12px;width:100%;min-width:60px;color:#222}
+.search button{border:0;background:#fff;color:var(--blue);padding:0 15px;font-weight:bold}
+.top-action{border:0;background:transparent;color:#fff;font-weight:bold;white-space:nowrap;padding:9px}
+.cart-count{background:var(--yellow);color:#111;border-radius:50%;padding:2px 6px;margin-left:4px}
+.subnav{background:#fff;display:flex;gap:24px;justify-content:center;padding:12px;overflow:auto;white-space:nowrap;box-shadow:0 1px 4px #0001}
+.subnav button{border:0;background:none;color:#27364b;font-weight:bold}
+.wrap{max-width:1280px;margin:16px auto;padding:0 14px}
+.hero{background:linear-gradient(115deg,#dbeafe,#f8fbff 55%,#fff0c2);border-radius:8px;min-height:210px;display:flex;align-items:center;justify-content:space-between;padding:28px 5%;overflow:hidden}
+.hero h1{font-size:clamp(25px,4vw,42px);margin:0 0 10px;color:#142d55}
+.hero p{color:#42536b;max-width:560px;line-height:1.6}
+.hero .hero-btn{border:0;border-radius:5px;background:var(--blue);color:#fff;padding:12px 18px;font-weight:bold}
+.hero-art{font-size:clamp(65px,12vw,120px);padding:8px 25px;filter:drop-shadow(0 8px 5px #0002)}
+.category-row{display:grid;grid-template-columns:repeat(8,minmax(75px,1fr));gap:10px;background:#fff;margin:14px 0;padding:16px;border-radius:8px}
+.cat{border:0;background:#fff;text-align:center;color:#27364b;font-weight:bold;padding:8px 3px;border-radius:6px}
+.cat:hover,.cat.active{background:#e8f2ff;color:var(--blue)}
+.cat .emoji{font-size:31px;display:block;margin-bottom:8px}
+.section{background:#fff;border-radius:8px;margin:14px 0;padding:18px}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+.section-head h2{font-size:21px;margin:0}
+.tools{display:flex;gap:8px;align-items:center}
+.tools select{border:1px solid #d5dce5;padding:8px;border-radius:5px;background:#fff}
+.products{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.product{border:1px solid #edf0f4;border-radius:7px;padding:12px;display:flex;flex-direction:column;min-width:0;transition:.15s}
+.product:hover{box-shadow:0 4px 16px #0001;transform:translateY(-2px)}
+.product-img{height:145px;background:#f7f9fc;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:65px;margin-bottom:10px}
+.product h3{font-size:15px;line-height:1.4;margin:4px 0 7px;min-height:42px}
+.rating{display:inline-block;background:var(--green);color:#fff;border-radius:4px;font-size:12px;padding:3px 6px;width:max-content}
+.price{font-size:18px;font-weight:bold;margin:8px 0 2px}
+.old-price{color:#7b8794;text-decoration:line-through;font-size:12px;margin-left:5px;font-weight:normal}
+.discount{color:var(--green);font-size:12px;margin:2px 0 10px}
+.product button{border:0;border-radius:4px;padding:10px;background:var(--yellow);font-weight:bold;margin-top:auto}
+.product button:hover{filter:brightness(.96)}
+.empty{padding:30px;text-align:center;color:var(--muted);grid-column:1/-1}
+footer{background:#172337;color:#dbe3ed;margin-top:25px;padding:28px 5%;display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+footer h3{color:#fff;margin-top:0}
+footer p{font-size:14px;line-height:1.6}
+.notice{font-size:12px;color:#e6edf7;border-top:1px solid #ffffff22;padding-top:14px;grid-column:1/-1}
+.overlay{display:none;position:fixed;inset:0;background:#0007;z-index:30;justify-content:flex-end}
+.overlay.show{display:flex}
+.drawer{background:#fff;width:min(440px,100%);height:100%;padding:20px;overflow:auto;box-shadow:-4px 0 20px #0002}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eee;padding-bottom:12px}
+.drawer-head h2{margin:0}
+.close{border:0;background:#eef2f7;border-radius:50%;width:36px;height:36px;font-size:20px}
+.cart-item{display:grid;grid-template-columns:50px 1fr auto;gap:10px;align-items:center;border-bottom:1px solid #eee;padding:14px 0}
+.cart-emoji{font-size:35px}
+.cart-item h4{margin:0 0 5px;font-size:14px}
+.qty{display:flex;align-items:center;gap:9px;margin-top:7px}
+.qty button{border:1px solid #ccd4df;background:#fff;border-radius:4px;width:26px;height:26px}
+.remove{border:0;background:none;color:#c0392b;font-size:12px;margin-top:4px}
+.cart-total{display:flex;justify-content:space-between;font-weight:bold;font-size:19px;padding:18px 0}
+.checkout{width:100%;border:0;border-radius:5px;background:#fb641b;color:#fff;font-weight:bold;padding:13px}
+.secondary{border:1px solid #d4dce7;background:#fff;border-radius:5px;padding:10px}
+.modal{display:none;position:fixed;inset:0;background:#0007;z-index:40;align-items:center;justify-content:center;padding:16px}
+.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:10px;padding:24px;max-width:480px;width:100%}
+.modal-box h2{margin-top:0}
+.modal-box input,.modal-box textarea{width:100%;padding:11px;margin:7px 0 12px;border:1px solid #cbd5e1;border-radius:5px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#172337;color:#fff;padding:12px 18px;border-radius:7px;z-index:50;display:none;max-width:90%;text-align:center}
+.toast.show{display:block}
+@media(max-width:950px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}.category-row{grid-template-columns:repeat(4,1fr)}.topbar{gap:10px}.top-action{padding:7px}}
+@media(max-width:650px){.topbar{flex-wrap:wrap;padding:10px 12px}.logo{font-size:22px}.search{order:3;flex-basis:100%;max-width:none}.top-action{margin-left:auto}.hero{min-height:175px;padding:20px}.hero-art{padding:0 0 0 8px}.category-row{gap:4px;padding:8px}.cat{font-size:12px}.cat .emoji{font-size:26px}.products{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.product{padding:9px}.product-img{height:115px;font-size:54px}.section{padding:12px}.section-head{align-items:flex-start;flex-wrap:wrap}.section-head h2{font-size:18px}.tools{width:100%}.tools select{flex:1;min-width:0}footer{grid-template-columns:1fr;padding:24px}.notice{grid-column:auto}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="logo">REDAS <small>আপনার কেনাকাটা, সহজে</small></div>
+  <form class="search" id="searchForm">
+    <input id="searchInput" type="search" placeholder="পণ্য খুঁজুন..." aria-label="পণ্য খুঁজুন">
+    <button type="submit">🔎 খুঁজুন</button>
+  </form>
+  <button class="top-action" id="loginOpen">👤 লগইন</button>
+  <button class="top-action" id="cartOpen">🛒 কার্ট <span class="cart-count" id="cartCount">0</span></button>
+</header>
+<nav class="subnav" aria-label="প্রধান বিভাগ">
+  <button data-category="সব">সব পণ্য</button>
+  <button data-category="ইলেকট্রনিক্স">ইলেকট্রনিক্স</button>
+  <button data-category="ফ্যাশন">ফ্যাশন</button>
+  <button data-category="বাড়ি">বাড়ি ও রান্নাঘর</button>
+  <button data-category="সৌন্দর্য">সৌন্দর্য</button>
+  <button data-category="খেলনা">খেলনা</button>
+</nav>
+<main class="wrap">
+  <section class="hero">
+    <div>
+      <h1>স্মার্ট কেনাকাটা শুরু হোক আজই!</h1>
+      <p>ফ্যাশন, ইলেকট্রনিক্স এবং দৈনন্দিন পণ্য—সব এক জায়গায়। এটি REDAS-এর নমুনা অনলাইন দোকান।</p>
+      <button class="hero-btn" id="shopNow">পণ্য দেখুন ↓</button>
+    </div>
+    <div class="hero-art" aria-hidden="true">🛍️</div>
+  </section>
+  <section class="category-row" aria-label="ক্যাটাগরি">
+    <button class="cat active" data-category="সব"><span class="emoji">🛍️</span>সব পণ্য</button>
+    <button class="cat" data-category="ইলেকট্রনিক্স"><span class="emoji">🎧</span>ইলেকট্রনিক্স</button>
+    <button class="cat" data-category="ফ্যাশন"><span class="emoji">👕</span>ফ্যাশন</button>
+    <button class="cat" data-category="বাড়ি"><span class="emoji">🏠</span>বাড়ি</button>
+    <button class="cat" data-category="সৌন্দর্য"><span class="emoji">🧴</span>সৌন্দর্য</button>
+    <button class="cat" data-category="খেলনা"><span class="emoji">🧸</span>খেলনা</button>
+    <button class="cat" data-category="বই"><span class="emoji">📚</span>বই</button>
+    <button class="cat" data-category="খাবার"><span class="emoji">🍪</span>খাবার</button>
+  </section>
+  <section class="section" id="productSection">
+    <div class="section-head">
+      <h2 id="productHeading">জনপ্রিয় পণ্য</h2>
+      <div class="tools">
+        <span id="resultCount" style="font-size:13px;color:#657386"></span>
+        <select id="sortSelect" aria-label="পণ্য সাজান">
+          <option value="popular">জনপ্রিয় আগে</option>
+          <option value="low">দাম: কম থেকে বেশি</option>
+          <option value="high">দাম: বেশি থেকে কম</option>
+          <option value="discount">ছাড় বেশি আগে</option>
+        </select>
+      </div>
+    </div>
+    <div class="products" id="products"></div>
+  </section>
+</main>
+<footer>
+  <div><h3>REDAS সম্পর্কে</h3><p>REDAS হলো একটি নমুনা অনলাইন দোকান। নিজের ব্র্যান্ড ও পণ্য অনুযায়ী নাম, ছবি এবং বিবরণ বদলাতে পারো।</p></div>
+  <div><h3>গ্রাহক সহায়তা</h3><p>যোগাযোগ: support@example.com<br>সময়: সকাল ১০টা – সন্ধ্যা ৬টা</p></div>
+  <div><h3>গুরুত্বপূর্ণ</h3><p>অর্ডার, পেমেন্ট ও ডেলিভারি এখনো বাস্তবে চালু নেই। বিক্রির জন্য আগে এগুলো সংযুক্ত করতে হবে।</p></div>
+  <div class="notice">© <span id="year"></span> REDAS বাজার। এটি একটি ডেমো ওয়েবসাইট; কোনো বাস্তব পেমেন্ট নেওয়া হয় না।</div>
+</footer>
+
+<div class="overlay" id="cartOverlay">
+  <aside class="drawer" role="dialog" aria-modal="true" aria-label="শপিং কার্ট">
+    <div class="drawer-head"><h2>🛒 তোমার কার্ট</h2><button class="close" id="cartClose" aria-label="বন্ধ">×</button></div>
+    <div id="cartItems"></div>
+    <div class="cart-total"><span>মোট</span><span id="cartTotal">₹0</span></div>
+    <button class="checkout" id="checkoutBtn">অর্ডার করতে এগিয়ে যাও</button>
+    <p style="font-size:12px;color:#657386">ডেমো: এই বোতাম বাস্তব অর্ডার বা পেমেন্ট করবে না।</p>
+  </aside>
+</div>
+
+<div class="modal" id="loginModal">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+    <h2 id="loginTitle">লগইন / অ্যাকাউন্ট</h2>
+    <p>এটি শুধু নমুনা ফর্ম। তথ্য কোথাও পাঠানো বা সংরক্ষণ করা হবে না।</p>
+    <label for="loginPhone">মোবাইল নম্বর</label>
+    <input id="loginPhone" type="tel" inputmode="numeric" placeholder="১০ অঙ্কের মোবাইল নম্বর" maxlength="10">
+    <div class="modal-actions"><button class="secondary" id="loginCancel">বন্ধ</button><button class="checkout" id="loginSubmit" style="width:auto">চালিয়ে যাও</button></div>
+  </div>
+</div>
+
+<div class="modal" id="checkoutModal">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <h2 id="checkoutTitle">ডেমো অর্ডার</h2>
+    <p>বাস্তব অর্ডার নেওয়ার জন্য সার্ভার, অর্ডার ডেটাবেস, ডেলিভারি ব্যবস্থা এবং নিরাপদ পেমেন্ট গেটওয়ে যুক্ত করতে হবে।</p>
+    <label for="customerName">নাম</label><input id="customerName" placeholder="তোমার নাম">
+    <label for="customerAddress">ডেলিভারির ঠিকানা</label><textarea id="customerAddress" rows="3" placeholder="ঠিকানা"></textarea>
+    <div class="modal-actions"><button class="secondary" id="checkoutCancel">বন্ধ</button><button class="checkout" id="demoOrder" style="width:auto">ডেমো দেখাও</button></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const productsData = [
+ {id:1,name:"ওয়্যারলেস ব্লুটুথ ইয়ারবাড",category:"ইলেকট্রনিক্স",price:799,old:1499,discount:47,rating:"4.2",emoji:"🎧"},
+ {id:2,name:"স্মার্ট ওয়াচ",category:"ইলেকট্রনিক্স",price:1199,old:2499,discount:52,rating:"4.1",emoji:"⌚"},
+ {id:3,name:"মোবাইল চার্জার",category:"ইলেকট্রনিক্স",price:299,old:499,discount:40,rating:"4.0",emoji:"🔌"},
+ {id:4,name:"ওভারসাইজড টি-শার্ট",category:"ফ্যাশন",price:399,old:799,discount:50,rating:"4.3",emoji:"👕"},
+ {id:5,name:"ক্যাজুয়াল স্নিকার্স",category:"ফ্যাশন",price:999,old:1799,discount:44,rating:"4.0",emoji:"👟"},
+ {id:6,name:"দৈনন্দিন ব্যাকপ্যাক",category:"ফ্যাশন",price:649,old:1199,discount:46,rating:"4.2",emoji:"🎒"},
+ {id:7,name:"স্টিলের জলের বোতল",category:"বাড়ি",price:249,old:399,discount:38,rating:"4.4",emoji:"🧴"},
+ {id:8,name:"রান্নাঘরের স্টোরেজ বক্স",category:"বাড়ি",price:349,old:599,discount:42,rating:"4.1",emoji:"🥣"},
+ {id:9,name:"টেবিল ল্যাম্প",category:"বাড়ি",price:499,old:899,discount:44,rating:"4.2",emoji:"💡"},
+ {id:10,name:"ফেস ওয়াশ",category:"সৌন্দর্য",price:199,old:299,discount:33,rating:"4.0",emoji:"🧴"},
+ {id:11,name:"স্কিন কেয়ার সেট",category:"সৌন্দর্য",price:549,old:899,discount:39,rating:"4.1",emoji:"🧼"},
+ {id:12,name:"নরম টেডি বিয়ার",category:"খেলনা",price:299,old:499,discount:40,rating:"4.5",emoji:"🧸"},
+ {id:13,name:"বিল্ডিং ব্লক সেট",category:"খেলনা",price:449,old:699,discount:36,rating:"4.2",emoji:"🧱"},
+ {id:14,name:"বাংলা গল্পের বই",category:"বই",price:179,old:250,discount:28,rating:"4.6",emoji:"📚"},
+ {id:15,name:"বিস্কুটের কম্বো প্যাক",category:"খাবার",price:149,old:199,discount:25,rating:"4.0",emoji:"🍪"}
+];
+let selectedCategory = "সব";
+let searchTerm = "";
+let cart = JSON.parse(localStorage.getItem("redasCart") || "{}");
+const $ = id => document.getElementById(id);
+const rupees = n => "₹" + Number(n).toLocaleString("en-IN");
+function toast(message){const el=$("toast");el.textContent=message;el.classList.add("show");clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove("show"),2600)}
+function saveCart(){localStorage.setItem("redasCart",JSON.stringify(cart));renderCart();updateCartCount()}
+function updateCartCount(){$("cartCount").textContent=Object.values(cart).reduce((sum,item)=>sum+item.qty,0)}
+function renderProducts(){
+ let items=productsData.filter(p=>(selectedCategory==="সব"||p.category===selectedCategory)&&(`${p.name} ${p.category}`.toLowerCase().includes(searchTerm.toLowerCase())));
+ const sort=$("sortSelect").value;
+ if(sort==="low")items.sort((a,b)=>a.price-b.price);
+ if(sort==="high")items.sort((a,b)=>b.price-a.price);
+ if(sort==="discount")items.sort((a,b)=>b.discount-a.discount);
+ $("productHeading").textContent=searchTerm?`“${searchTerm}” খোঁজার ফল`:selectedCategory==="সব"?"জনপ্রিয় পণ্য":selectedCategory+" পণ্য";
+ $("resultCount").textContent=items.length+"টি পণ্য";
+ $("products").innerHTML=items.length?items.map(p=>`<article class="product">
+   <div class="product-img" aria-label="${p.name}">${p.emoji}</div>
+   <h3>${p.name}</h3><span class="rating">★ ${p.rating}</span>
+   <div class="price">${rupees(p.price)} <span class="old-price">${rupees(p.old)}</span></div>
+   <div class="discount">${p.discount}% ছাড়</div>
+   <button onclick="addToCart(${p.id})">কার্টে যোগ করো</button>
+ </article>`).join(""):`<div class="empty">দুঃখিত, কোনো পণ্য পাওয়া যায়নি। অন্য শব্দ দিয়ে খুঁজে দেখো।</div>`;
+ document.querySelectorAll("[data-category]").forEach(btn=>btn.classList.toggle("active",btn.dataset.category===selectedCategory));
+}
+function addToCart(id){const p=productsData.find(x=>x.id===id);if(!p)return;if(cart[id])cart[id].qty++;else cart[id]={id:p.id,name:p.name,price:p.price,emoji:p.emoji,qty:1};saveCart();toast(p.name+" কার্টে যোগ হয়েছে")}
+function changeQty(id,delta){if(!cart[id])return;cart[id].qty+=delta;if(cart[id].qty<=0)delete cart[id];saveCart()}
+function removeItem(id){delete cart[id];saveCart();toast("পণ্যটি কার্ট থেকে সরানো হয়েছে")}
+function renderCart(){
+ const items=Object.values(cart);
+ $("cartItems").innerHTML=items.length?items.map(i=>`<div class="cart-item">
+  <div class="cart-emoji">${i.emoji}</div><div><h4>${i.name}</h4><strong>${rupees(i.price)}</strong>
+  <div class="qty"><button aria-label="কমাও" onclick="changeQty(${i.id},-1)">−</button><span>${i.qty}</span><button aria-label="বাড়াও" onclick="changeQty(${i.id},1)">+</button></div>
+  <button class="remove" onclick="removeItem(${i.id})">সরিয়ে দাও</button></div><strong>${rupees(i.price*i.qty)}</strong>
+ </div>`).join(""):`<div class="empty">তোমার কার্ট এখন খালি।<br>পছন্দের পণ্য কার্টে যোগ করো।</div>`;
+ $("cartTotal").textContent=rupees(items.reduce((s,i)=>s+i.price*i.qty,0));
+ $("checkoutBtn").disabled=!items.length;$("checkoutBtn").style.opacity=items.length?1:.55;
+}
+function openModal(id){$(id).classList.add("show")}
+function closeModal(id){$(id).classList.remove("show")}
+document.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("click",()=>{selectedCategory=btn.dataset.category;searchTerm="";$("searchInput").value="";renderProducts();$("productSection").scrollIntoView({behavior:"smooth",block:"start"})}));
+$("searchForm").addEventListener("submit",e=>{e.preventDefault();searchTerm=$("searchInput").value.trim();renderProducts();$("productSection").scrollIntoView({behavior:"smooth",block:"start"})});
+$("sortSelect").addEventListener("change",renderProducts);
+$("shopNow").addEventListener("click",()=>$("productSection").scrollIntoView({behavior:"smooth"}));
+$("cartOpen").addEventListener("click",()=>$("cartOverlay").classList.add("show"));
+$("cartClose").addEventListener("click",()=>$("cartOverlay").classList.remove("show"));
+$("cartOverlay").addEventListener("click",e=>{if(e.target===$("cartOverlay"))$("cartOverlay").classList.remove("show")});
+$("loginOpen").addEventListener("click",()=>openModal("loginModal"));
+$("loginCancel").addEventListener("click",()=>closeModal("loginModal"));
+$("loginSubmit").addEventListener("click",()=>{const phone=$("loginPhone").value.trim();if(!/^[0-9]{10}$/.test(phone)){toast("সঠিক ১০ অঙ্কের মোবাইল নম্বর লিখো");return}closeModal("loginModal");toast("এটি ডেমো—বাস্তব OTP লগইন যুক্ত করা নেই")});
+$("checkoutBtn").addEventListener("click",()=>{if(Object.keys(cart).length)openModal("checkoutModal")});
+$("checkoutCancel").addEventListener("click",()=>closeModal("checkoutModal"));
+$("demoOrder").addEventListener("click",()=>{if(!$("customerName").value.trim()||!$("customerAddress").value.trim()){toast("নাম ও ঠিকানা লিখো");return}closeModal("checkoutModal");$("cartOverlay").classList.remove("show");toast("ডেমো সফল! বাস্তব অর্ডার জমা হয়নি।")});
+document.querySelectorAll(".modal").forEach(m=>m.addEventListener("click",e=>{if(e.target===m)m.classList.remove("show")}));
+$("year").textContent=new Date().getFullYear();
+renderProducts();renderCart();updateCartCount();
+</script>
+</body>
+</html>
